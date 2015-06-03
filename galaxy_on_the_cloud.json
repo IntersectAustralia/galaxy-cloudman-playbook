@@ -9,6 +9,11 @@
     "aws_source_ami": "ami-9a562df2",
     "aws_instance_type": "c3.large",
     "os_source_image": "d57696ba-5ed2-43fe-bf78-a587829973a9",
+    "os_auth_url": "{{env `OS_AUTH_URL`}}",
+    "os_tenant_id": "{{env `OS_TENANT_ID`}}",
+    "os_tenant_name": "{{env `OS_TENANT_NAME`}}",
+    "os_username": "{{env `OS_USERNAME`}}",
+    "os_password": "{{env `OS_PASSWORD`}}",
     "os_flavor": "1"
   },
 
@@ -79,7 +84,18 @@
        "--extra-vars",
        "aws_access_key='{{user `aws_access_key`}}'",
        "--extra-vars",
-       "aws_secret_key='{{user `aws_secret_key`}}'"
+       "aws_secret_key='{{user `aws_secret_key`}}'",
+       "--extra-vars",
+       "os_auth_url='{{user `os_auth_url`}}'",
+       "--extra-vars",
+       "os_tenant_id='{{user `os_tenant_id`}}'",
+       "--extra-vars",
+       "os_tenant_name='{{user `os_tenant_name`}}'",
+       "--extra-vars",
+       "os_username='{{user `os_username`}}'",
+       "--extra-vars",
+       "os_password='{{user `os_password`}}'",
+       "-v"
     ]
   },
   {

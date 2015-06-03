@@ -38,3 +38,18 @@
 # Display MD5 sum for the created archive
 - debug: msg="{{ md5.stdout }}"
   ignore_errors: true
+
+- name: Galaxy - Install openstack swift packages
+  pip: name={{ item }} virtualenv="{{ galaxy_venv_dir }}"
+  with_items:
+    - python-swiftclient
+    - python-keystoneclient
+
+- name: Galaxy - Upload filesystem archive
+  command: chdir={{ galaxy_archive_path }} {{ galaxy_venv_dir }}/bin/swift upload {{ cm_bucket_name }} {{ galaxy_archive_name }} --object-name {{ galaxy_timestamped_archive_name }}
+  environment:
+     OS_AUTH_URL: "{{ os_auth_url }}"
+     OS_TENANT_ID: "{{ os_tenant_id }}"
+     OS_TENANT_NAME: "{{ os_tenant_name }}"
+     OS_USERNAME: "{{ os_username }}"
+     OS_PASSWORD: "{{ os_password }}"
