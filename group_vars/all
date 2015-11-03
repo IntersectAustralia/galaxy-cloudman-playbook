@@ -28,9 +28,8 @@ cm_system_environment: yes  # Also requires cm_venvburrito to be set
 cm_install_s3fs: yes
 cm_configure_nginx: yes
 cm_install_proftpd: yes
-cm_install_bedtools: yes
+cm_install_bedtools: no
 cm_install_novnc: no
-cm_bucket_name: playbook-cm-{{timestamp}}
 cleanup: no
 # If `only_cleanup` is set, only the cleanup tasks will run and no other.
 # This is intended to be set as a command line argument.
@@ -63,7 +62,7 @@ cm_create_archive: yes
 galaxy_archive_path: /mnt/galaxyFS_archive
 galaxy_archive_name: galaxyFS-latest.tar.gz
 galaxy_timestamped_archive_name: galaxyFS-{{ lookup('pipe', 'date +%Y%m%d') }}.tar.gz
-galaxy_archive_bucket: cloudman/fs-archives
+galaxy_archive_bucket: cm-alveo-qa
 aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY') }}"
 aws_secret_key: "{{ lookup('env','AWS_SECRET_KEY') }}"
 
@@ -72,8 +71,8 @@ len_file_path: "{{ galaxy_server_dir }}/tool-data/len"
 bedtools_version: 2.24.0
 
 #-- Tools role configs
-galaxy_tools_install_tools: yes
-galaxy_tools_create_bootstrap_user: yes
+galaxy_tools_install_tools: no
+galaxy_tools_create_bootstrap_user: no
 # galaxy_tools_tool_list_file: files/tool_list.yaml.test
 
 #-- Galaxy role configs

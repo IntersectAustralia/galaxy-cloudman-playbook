@@ -28,15 +28,15 @@
   command: chdir={{ galaxyFS_base_dir }} tar -czf {{ galaxy_archive_path }}/{{ galaxy_archive_name }} -C {{ galaxyFS_base_dir }} .
   sudo_user: root
 
-- name: Install s3cmd library
-  pip: name=s3cmd
-  sudo_user: root
+# - name: Install s3cmd library
+#   pip: name=s3cmd
+#   sudo_user: root
 
-- name: Upload timestamped filesystem archive
-  command: s3cmd --access_key={{ aws_access_key }} --secret_key={{ aws_secret_key }} --reduced-redundancy --acl-public put {{ galaxy_archive_path }}/{{ galaxy_archive_name }} s3://{{ galaxy_archive_bucket }}/{{ galaxy_timestamped_archive_name }}
+# - name: Upload timestamped filesystem archive
+#   command: s3cmd --access_key={{ aws_access_key }} --secret_key={{ aws_secret_key }} --reduced-redundancy --acl-public put {{ galaxy_archive_path }}/{{ galaxy_archive_name }} s3://{{ galaxy_archive_bucket }}/{{ galaxy_timestamped_archive_name }}
 
-- name: Upload filesystem archive
-  command: s3cmd --access_key={{ aws_access_key }} --secret_key={{ aws_secret_key }} --reduced-redundancy --acl-public put {{ galaxy_archive_path }}/{{ galaxy_archive_name }} s3://{{ galaxy_archive_bucket }}/
+# - name: Upload filesystem archive
+#   command: s3cmd --access_key={{ aws_access_key }} --secret_key={{ aws_secret_key }} --reduced-redundancy --acl-public put {{ galaxy_archive_path }}/{{ galaxy_archive_name }} s3://{{ galaxy_archive_bucket }}/
 
 - name: Get the archive MD5 sum
   shell: "md5sum {{ galaxy_archive_path }}/{{ galaxy_archive_name }} | cut -f 1 -d' '"
@@ -47,17 +47,29 @@
 - debug: msg="{{ md5.stdout }}"
   ignore_errors: true
 
-- name: Galaxy - Install openstack swift packages
+- name: Install openstack swift packages
   pip: name={{ item }} virtualenv="{{ galaxy_venv_dir }}"
   with_items:
     - python-swiftclient
     - python-keystoneclient
 
-- name: Galaxy - Upload filesystem archive
-  command: chdir={{ galaxy_archive_path }} {{ galaxy_venv_dir }}/bin/swift upload {{ cm_bucket_name }} {{ galaxy_archive_name }} --object-name {{ galaxy_timestamped_archive_name }}
+- name: Upload timestamped filesystem archive
+  command: chdir={{ galaxy_archive_path }} {{ galaxy_venv_dir }}/bin/swift upload {{ galaxy_archive_bucket }} {{ galaxy_archive_name }} --object-name {{ galaxy_timestamped_archive_name }}
   environment:
-     OS_AUTH_URL: "{{ os_auth_url }}"
-     OS_TENANT_ID: "{{ os_tenant_id }}"
-     OS_TENANT_NAME: "{{ os_tenant_name }}"
-     OS_USERNAME: "{{ os_username }}"
-     OS_PASSWORD: "{{ os_password }}"
+     OS_AUTH_URL: "{{ lookup('env', 'OS_AUTH_URL') }}"
+     OS_TENANT_ID: "{{ lookup('env', 'OS_TENANT_ID') }}"
+     OS_TENANT_NAME: "{{ lookup('env', 'OS_TENANT_NAME') }}"
+     OS_USERNAME: "{{ lookup('env', 'OS_USERNAME') }}"
+     OS_PASSWORD: "{{ lookup('env', 'OS_PASSWORD') }}"
+
+- name: Upload filesystem archive
+  command: chdir={{ galaxy_archive_path }} {{ galaxy_venv_dir }}/bin/swift upload {{ galaxy_archive_bucket }} {{ galaxy_archive_name }}
+  environment:
+     OS_AUTH_URL: "{{ lookup('env', 'OS_AUTH_URL') }}"
+     OS_TENANT_ID: "{{ lookup('env', 'OS_TENANT_ID') }}"
+     OS_TENANT_NAME: "{{ lookup('env', 'OS_TENANT_NAME') }}"
+     OS_USERNAME: "{{ lookup('env', 'OS_USERNAME') }}"
+     OS_PASSWORD: "{{ lookup('env', 'OS_PASSWORD') }}"
+
+
+

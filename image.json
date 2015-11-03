@@ -5,10 +5,16 @@
     "vnc_pwd": "{{env `CM_VNC_PWD`}}",
     "gftp_pwd": "{{env `CM_GALAXY_FTP_PWD`}}",
     "gadmin_pwd": "{{env `CM_GALAXY_ADMIN_PWD`}}",
-    "image_name": "Galaxy-CloudMan-{{timestamp}}",
+    "image_name": "Alveo-Galaxy-CloudMan-{{timestamp}}",
     "aws_source_ami": "ami-9a562df2",
     "aws_instance_type": "c3.large",
-    "cc_floating_ip": "129.114.33.183"
+    "cc_floating_ip": "129.114.33.183",
+    "os_auth_url": "{{env `OS_AUTH_URL`}}",
+    "os_tenant_id": "{{env `OS_TENANT_ID`}}",
+    "os_tenant_name": "{{env `OS_TENANT_NAME`}}",
+    "os_username": "{{env `OS_USERNAME`}}",
+    "os_password": "{{env `OS_PASSWORD`}}",
+    "os_flavor": "1"
   },
 
 
